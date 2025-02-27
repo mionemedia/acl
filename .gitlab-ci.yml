@@ -1,0 +1,19 @@
+include:
+  - project: 'tailscale-dev/gitops-acl-ci'
+    ref: main
+    file: 'acls.gitlab-ci.yaml'
+    with:
+      api-key: tskey-api-kMt5McCb2e11CNTRL-pJ2ckKCXGi6uxCHPj13hi6JMAR2iAUXe
+      tailnet: mionemedia@gmail.com
+
+stages:
+  - test
+  - apply
+
+test:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+apply:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
