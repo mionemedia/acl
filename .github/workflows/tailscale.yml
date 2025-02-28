@@ -1,0 +1,32 @@
+name: Sync Tailscale ACLs
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  acls:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy ACL
+        if: github.event_name == 'push'
+        id: deploy-acl
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          api-key: ${{tskey-auth-kdFfBSKjnd11CNTRL-yTKa5o1YaX1eLphbtse4Y1JZPj7Nb6XXe}}
+          tailnet: ${{tskey-client-k4yAiANRgZ11CNTRL-5vaAgS9TQ1TpgrLXeeBgzSmuadcX3N4CD}}
+          action: apply
+
+      - name: Test ACL
+        if: github.event_name == 'pull_request'
+        id: test-acl
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          api-key: ${{tskey-auth-kdFfBSKjnd11CNTRL-yTKa5o1YaX1eLphbtse4Y1JZPj7Nb6XXe}}
+          tailnet: ${{tskey-client-k4yAiANRgZ11CNTRL-5vaAgS9TQ1TpgrLXeeBgzSmuadcX3N4CD}}
+          action: test
