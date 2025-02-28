@@ -3,8 +3,8 @@ include:
     ref: main
     file: 'acls.gitlab-ci.yaml'
     with:
-      api-key: tskey-api-kMt5McCb2e11CNTRL-pJ2ckKCXGi6uxCHPj13hi6JMAR2iAUXe
-      tailnet: mionemedia@gmail.com
+      api-key: tskey-auth-kB3xkTw4qh11CNTRL-7iejFti5ZmFa8mq6C7dHnFRNYNPjy5CYN
+      tailnet: tskey-api-kQBugEm2EP11CNTRL-HUShQTHQTuMnX56J3Rp3uM4osojTXRY75
 
 stages:
   - test
