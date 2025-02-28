@@ -6,9 +6,19 @@
 	// },
 
 	// Define the tags which can be applied to devices and by which users.
-	// "tagOwners": {
-	//  	"tag:example": ["autogroup:admin"],
-	// },
+	"tagOwners": {
+		"tag:example":              ["autogroup:admin"],
+		"tag:github-app-connector": ["autogroup:admin"],
+	},
+
+	// Define automatic approvers for routes.
+	// This section specifies which tags can automatically approve connections to certain routes.
+	"autoApprovers": {
+		"routes": {
+			"192.30.252.0/22": ["tag:github-app-connector"],
+			"::/0":            ["tag:github-app-connector"],
+		},
+	},
 
 	// Define access control lists for users, groups, autogroups, tags,
 	// Tailscale IP addresses, and subnet ranges.
@@ -28,22 +38,28 @@
 	//      "posture:anyMac",
 	// ],
 
+	// Define postures that will be applied to all rules without any specific
+	// srcPosture definition.
+	// "defaultSrcPosture": [
+	//      "posture:anyMac",
+	// ],
+
 	// Define device posture rules requiring devices to meet
 	// certain criteria to access parts of your system.
 	// "postures": {
 	//      // Require devices running macOS, a stable Tailscale
 	//      // version and auto update enabled for Tailscale.
-	// 	"posture:autoUpdateMac": [
-	// 	    "node:os == 'macos'",
-	// 	    "node:tsReleaseTrack == 'stable'",
-	// 	    "node:tsAutoUpdate",
-	// 	],
+	//  "posture:autoUpdateMac": [
+	//      "node:os == 'macos'",
+	//      "node:tsReleaseTrack == 'stable'",
+	//      "node:tsAutoUpdate",
+	//  ],
 	//      // Require devices running macOS and a stable
 	//      // Tailscale version.
-	// 	"posture:anyMac": [
-	// 	    "node:os == 'macos'",
-	// 	    "node:tsReleaseTrack == 'stable'",
-	// 	],
+	//  "posture:anyMac": [
+	//      "node:os == 'macos'",
+	//      "node:tsReleaseTrack == 'stable'",
+	//  ],
 	// },
 
 	// Define users and devices that can use Tailscale SSH.
@@ -62,17 +78,32 @@
 			// Funnel policy, which lets tailnet members control Funnel
 			// for their own devices.
 			// Learn more at https://tailscale.com/kb/1223/tailscale-funnel/
+
+			"target": ["*"],
+			"app": {
+				"tailscale.com/app-connectors": [{
+					"name":        "github",
+					"connectors":  ["tag:github-app-connector", "tag:example"],
+					"presetAppID": "github",
+				}],
+			},
+		},
+		{
+			// Funnel policy, which lets tailnet members control Funnel
+			// for their own devices.
+			// Learn more at https://tailscale.com/kb/1223/tailscale-funnel/
 			"target": ["autogroup:member"],
 			"attr":   ["funnel"],
 		},
 	],
 
 	// Test access rules every time they're saved.
-	// "tests": [
-	//  	{
-	//  		"src": "alice@example.com",
-	//  		"accept": ["tag:example"],
-	//  		"deny": ["100.101.102.103:443"],
-	//  	},
+	// Define test cases to validate access rules every time they're saved.
+	// "test: [
+	//    "src": "example@example.com",
+	//    "src": "mionemedia@gmail.com",
+	//    "accept": ["tag:example"],
+	//    "deny": ["100.101.102.103:443"],
+	//	 },
 	// ],
 }
